@@ -1,0 +1,671 @@
+/* ===================================================================
+   style.css — Full stylesheet for Cosplay Clusters (with background
+                 video, custom controls, CSS waveform, audio sync overrides,
+                 plus DINdong font and updated outline colors)
+   =================================================================== */
+
+   /*hold up*/
+
+/* ----------  CUSTOM FONTS ---------- */
+/* DINdong */
+@font-face {
+  font-family: 'DINdong';
+  src: url('/assets/fonts/DINdong.otf') format('opentype'),
+       url('/assets/fonts/DINdong.otf')  format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* (If you have a bold variant, uncomment and adjust paths)
+@font-face {
+  font-family: 'DINdong';
+  src: url('/fonts/DINdong-Bold.woff2') format('woff2'),
+       url('/fonts/DINdong-Bold.woff')  format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+*/
+
+/* Inter (fallback) */
+/*@font-face {
+  font-family: 'Inter';
+  src: url('https://rsms.me/inter/font-files/Inter-roman.var.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+}*/
+
+/* ----------  PAGE-WIDE LAYOUT  ---------- */
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  background: transparent;     /* grid shows through */
+  font-family: 'DINdong';
+  overflow: hidden;            /* hide any scrollbars behind video */
+}
+
+/* -------------------------------------------------------------------
+   GRID OVERLAY
+   ------------------------------------------------------------------- */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+  background-size: 25px 25px;
+  background-position: 0 0;
+  background-image:
+    linear-gradient(to right, #e0e0e0 1px, transparent 1px),
+    linear-gradient(to bottom, #e0e0e0 1px, transparent 1px);
+    opacity: 0.33;
+}
+
+/* -------------------------------------------------------------------
+   BACKGROUND VIDEO AND STREAM (MARQUEE STYLE)
+   ------------------------------------------------------------------- */
+.stream-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  z-index: 2; /* Above video, below grid */
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* Allow clicking through to video */
+}
+
+.stream-container.show {
+  display: flex;
+}
+
+.marquee-track {
+  width: 100%;
+  height: auto;
+  display: flex;
+  overflow: hidden;
+  background: transparent;
+  padding: 20px 0;
+  pointer-events: none; /* Allow clicking through to video */
+}
+
+.marquee-sequence {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Animation */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Playing state */
+.marquee-track.playing .marquee-sequence {
+  animation-play-state: running !important;
+}
+
+/* Marquee items */
+.marquee-item {
+  flex-shrink: 0;
+  height: auto;
+  object-fit: cover;
+  transition: width 0.3s ease;
+  pointer-events: none; /* Allow clicking through to video */
+}
+
+/* Base video styles */
+#bgVideo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+#bgVideo.show {
+  opacity: 1;
+}
+
+/* Hide native controls */
+#bgVideo::-webkit-media-controls,
+#bgVideo::-internal-media-controls {
+  display: none !important;
+}
+
+/* -------------------------------------------------------------------
+   WIDTH CONTROL BUTTONS
+   ------------------------------------------------------------------- */
+/* Width control - single button that cycles through sizes */
+.width-controls {
+  display: none; /* Hide the width controls */
+  margin-left: 16px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+#videoControls.show .width-controls {
+  display: none; /* Keep hidden even when video is active */
+  pointer-events: none;
+}
+
+.width-btn {
+  background: white;
+  border: 1px solid #ccc;
+  color: #666;
+  font-size: 12px;
+  font-family: 'DINdong', 'Inter', sans-serif;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  pointer-events: none;  /* Disable by default */
+}
+
+#videoControls.show .width-btn {
+  pointer-events: auto;  /* Enable when video is active */
+}
+
+.width-btn:hover {
+  background: #f0f0f0;
+  border-color: #999;
+}
+
+.width-btn.active {
+  background: #333;
+  color: white;
+  border-color: #333;
+}
+
+/* -------------------------------------------------------------------
+   RESPONSIVE DESIGN
+   ------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .stream-item:not([style*="height: 100vh"]),
+  #bgVideo:not([style*="height: 100vh"]) {
+    min-width: 30vw !important; /* Larger minimum on mobile */
+  }
+  
+  .width-controls {
+    margin-left: 8px;
+  }
+  
+  .width-btn {
+    padding: 2px 6px;
+    font-size: 11px;
+  }
+  
+  #videoControls {
+    bottom: 10px;
+    gap: 4px;
+    padding: 4px 8px;
+    max-width: 95vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .stream-item:not([style*="height: 100vh"]),
+  #bgVideo:not([style*="height: 100vh"]) {
+    min-width: 50vw !important; /* Even larger on small mobile */
+  }
+  
+  .width-controls {
+    order: 1;
+    width: 100%;
+    justify-content: center;
+    margin: 4px 0 0 0;
+  }
+  
+  /* Hide some buttons on very small screens */
+  .width-btn[data-width="33"] {
+    display: none;
+  }
+}
+
+/* Ensure smooth transitions during resize */
+@media (prefers-reduced-motion: no-preference) {
+  .marquee-content {
+    transition: none; /* Disable transitions during animation */
+  }
+}
+
+/* -------------------------------------------------------------------
+   CUSTOM VIDEO + ZOOM CONTROLS (CENTERED)
+   ------------------------------------------------------------------- */
+#videoControls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  pointer-events: none;  /* Disable all interactions by default */
+}
+
+#videoControls.show {
+  pointer-events: auto;  /* Enable interactions only when video is active */
+}
+
+/* Zoom buttons - always black and interactive */
+.zoomBtn {
+  background: none;
+  border: none;
+  color: #000;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+  transition: transform 0.1s;
+  pointer-events: auto;  /* Always interactive */
+}
+
+#videoControls #zoomOut {
+  margin-right: 16px;
+}
+
+.zoomBtn:hover {
+  transform: scale(1.1);
+}
+
+.zoomBtn:active {
+  transform: scale(0.9);
+}
+
+/* Play/Pause button - dark grey by default, black when active */
+#playPause {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform 0.1s;
+  pointer-events: none;  /* Disable by default */
+}
+
+#videoControls.show #playPause {
+  color: #000;
+  pointer-events: auto;  /* Enable when video is active */
+}
+
+#playPause:hover {
+  transform: scale(1.1);
+}
+
+#playPause:active {
+  transform: scale(0.9);
+}
+
+/* Progress bar - dark grey by default, black when active */
+#progress {
+  width: 200px;
+  height: 4px;
+  -webkit-appearance: none;
+  background: #666;
+  border-radius: 2px;
+  cursor: pointer;
+  pointer-events: none;  /* Disable by default */
+}
+
+#videoControls.show #progress {
+  background: #000;
+  pointer-events: auto;  /* Enable when video is active */
+}
+
+#progress::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #666;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#videoControls.show #progress::-webkit-slider-thumb {
+  background: #000;
+}
+
+/* ----------  HEADING CONTAINER  ---------- */
+/* --- HEADER LAYOUT: stack vertically, background, fullscreen on hover --- */
+#headerContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* Page Title */
+#pageTitle {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: transparent;
+  padding: 15px;
+  border-radius: 24px;
+  box-shadow: none;
+  width: fit-content;
+  max-width: 600px;
+  transition: all 0.3s ease;
+  margin: 0;
+}
+
+#pageTitle:hover {
+  background: var(--bg-color, #fff);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#pageTitle.expanded {
+  position: fixed;
+  inset: 16px;
+  width: auto;
+  height: auto;
+  max-width: none;
+  border-radius: 24px;
+  background: var(--bg-color, #fff);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 16px;
+}
+
+/* Typography */
+#pageTitle h1 {
+  font-size: 2em;
+  margin: 0 0 0.3em;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+  color: #666666;
+}
+
+#pageTitle h3 {
+  font-size: 1.1em;
+  margin: 0 0 0.4em;
+  font-weight: 400;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+#pageTitle h5 {
+  font-size: 0.9em;
+  margin: 0 0 0.4em;
+  font-weight: 400;
+  line-height: 1;
+  opacity: 0.8;
+  max-width: 600px;
+  color: #666666;
+}
+
+#pageTitle h5:last-of-type {
+  color: #666666;
+  font-size: 0.85em;
+  margin-bottom: 0;
+}
+
+/* Expanded state typography */
+#pageTitle.expanded h1,
+#pageTitle.expanded h3,
+#pageTitle.expanded h5 {
+  color: white;
+  mix-blend-mode: exclusion;
+}
+
+#pageTitle h6 {
+  font-size: 0.8em;
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.4;
+  opacity: 0.7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #pageTitle {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    width: calc(100% - 16px);
+    padding: 12px;
+    border-radius: 20px;
+  }
+
+  #pageTitle.expanded {
+    width: 100vw;
+  }
+
+  #pageTitle h1 {
+    font-size: 1.8em;
+  }
+
+  #pageTitle h3 {
+    font-size: 1em;
+  }
+
+  #pageTitle h5 {
+    font-size: 0.85em;
+  }
+
+  #pageTitle h6 {
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 480px) {
+  #pageTitle {
+    padding: 10px;
+    width: calc(100% - 20px);
+    border-radius: 16px;
+  }
+
+  #pageTitle.expanded {
+    width: 100vw;
+  }
+
+  #pageTitle h1 {
+    font-size: 1.6em;
+  }
+
+  #pageTitle h3 {
+    font-size: 0.9em;
+  }
+
+  #pageTitle h5 {
+    font-size: 0.8em;
+  }
+
+  #pageTitle h6 {
+    font-size: 0.7em;
+  }
+}
+
+/* ----------  SVG & UI  ---------- */
+#svgContainer {
+  position: fixed;  /* Changed from relative positioning */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  cursor: pointer;
+  z-index: 1; /* Behind marquee (2) and controls (3) */
+}
+
+.link {
+  fill: none;
+  stroke: #555;
+  stroke-opacity: .4;
+  stroke-width: 1.5px;
+}
+
+/* ── PER-LINK HOVER & ACTIVE COLORING ── */
+a.link-node:hover circle,
+a.link-node.active circle { fill: var(--link-color); }
+a.link-node:hover text,
+a.link-node.active text   { fill: var(--link-color); }
+
+/* text inside <a> or plain groups */
+a text,
+g text {
+  font: 10px/1 'Inter', sans-serif;
+  fill: #000;
+}
+
+/* disable text selection */
+#svgContainer,
+#svgContainer text,
+#videoControls button,
+#videoControls input {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ===================================================================
+   CSS-ONLY WAVEFORM (replacing the <canvas>)
+   =================================================================== */
+:root {
+  --m: 17.5;
+  --wavefreq: calc(100ms * var(--m));
+}
+@keyframes waveform {
+  0%   { transform: scaleY(.5); }
+  50%  { transform: scaleY(1.5); }
+  100% { transform: scaleY(.5); }
+}
+#videoControls #waveform {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  width: 70px;
+  height: 20px;
+  cursor: pointer;
+}
+#videoControls [class^="wave"] {
+  width: 3px;
+  aspect-ratio: .125/1;
+  background-color: #000;
+  border-radius: 4px;
+  transform-origin: center;
+  animation: none !important;
+}
+#videoControls [class^="wave"]::before {
+  content: "";
+  display: block;
+  height: 20%;
+}
+
+/* -------------------------------------------------------------------
+   AUDIO SYNC OVERRIDES
+   ------------------------------------------------------------------- */
+/* no additional rules needed here */
+
+/* -------------------------------------------------------------------
+   IMAGE STREAM
+   ------------------------------------------------------------------- */
+.image-stream {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* Allow clicking through to video controls */
+}
+
+.image-stream.show {
+  display: flex;
+}
+
+.image-track {
+  width: 100%;
+  height: auto;
+  display: flex;
+  overflow: hidden;
+  padding: 20px 0;
+  pointer-events: none; /* Allow clicking through to video controls */
+}
+
+.image-sequence {
+  display: flex;
+  align-items: center;
+  gap: 40px; /* Increased gap between images */
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* Animation */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Make animation slightly slower */
+.image-sequence {
+  animation-duration: 20s !important; /* Slower animation */
+}
+
+.stream-image {
+  flex-shrink: 0;
+  height: auto;
+  object-fit: cover;
+  transition: width 0.3s ease;
+  pointer-events: none; /* Allow clicking through to video controls */
+}
+
+/* Video controls should be above image stream */
+#videoControls {
+  z-index: 3; /* Above image stream */
+  pointer-events: auto; /* Ensure controls are clickable */
+}
+
+/* Base video styles */
+#bgVideo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 1;
+}

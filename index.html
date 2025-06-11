@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Cosplay Clusters – Interactive Dendrogram</title>
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- your existing styles -->
+  <link rel="stylesheet" href="/frontend/style.css">
+</head>
+<body>
+  <!-- Headlines -->
+  <header id="pageTitle">
+    <div class="pageTitle-content">
+      <div class="text-container">
+        <h1>Cosplay Clusters</h1>
+        <h5>Gathering and speaking about what I have found <br>and think about cosplay communities on the internet. <br>
+        If you have content, images, text or even a video <br>to submit, feel free to write me at <br>office@olivermatzner.com</h5>
+        <h5>A project during the Known Unknowns assignment at <br>Gerrit Rietveld Academie 2nd Year Assignment in the <br>Graphic design class by Tomas Celizna.</h5>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Video element (no native controls) -->
+  <video id="bgVideo" muted playsinline></video>
+
+  <!-- SVG canvas for dendrogram -->
+  <svg id="svgContainer"
+       viewBox="0 0 1400 1400"
+       preserveAspectRatio="xMidYMid meet"></svg>
+
+  <!-- Centralized custom controls UI -->
+  <div id="videoControls">
+    <button id="zoomIn"  class="zoomBtn" title="Zoom in">+</button>
+    <button id="zoomOut" class="zoomBtn" title="Zoom out">−</button>
+    <button id="playPause" title="Play / Pause">▶︎</button>
+    <input type="range" id="progress" value="0" step="0.01">
+
+    <section id="waveform">
+      <div class="wave0"></div>
+      <div class="wave1"></div>
+      <div class="wave2"></div>
+      <div class="wave3"></div>
+      <div class="wave4"></div>
+      <div class="wave5"></div>
+      <div class="wave6"></div>
+    </section>
+    
+    <!-- Width adjustment control -->
+    <div class="width-controls">
+      <button id="widthToggle" class="width-btn" title="Toggle width">20vw</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/frontend/main.js"></script>
+  <script type="text/javascript">
+    // Pick a random color and set as --bg-color on #pageTitle
+    const colors = ['#FFADAD', '#FFD6A5', '#FDFFB6', '#CAFFBF', '#9BF6FF', '#A0C4FF', '#BDB2FF', '#FFC6FF'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    document.getElementById('pageTitle').style.setProperty('--bg-color', randomColor);
+
+    // Header expansion functionality
+    const textContainer = document.querySelector('.text-container');
+    const pageTitle = document.getElementById('pageTitle');
+    let isExpanded = false;
+
+    textContainer.addEventListener('mouseenter', () => {
+      if (!isExpanded) {
+        pageTitle.classList.add('expanded');
+        isExpanded = true;
+      }
+    });
+
+    textContainer.addEventListener('mouseleave', () => {
+      if (isExpanded) {
+        pageTitle.classList.remove('expanded');
+        isExpanded = false;
+      }
+    });
+  </script>
+</body>
+</html>
+
