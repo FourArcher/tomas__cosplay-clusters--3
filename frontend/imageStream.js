@@ -61,6 +61,7 @@ export class ImageStream {
             img.src = shuffledImages[i % shuffledImages.length];
             img.className = 'stream-image';
             img.style.width = this.width;
+            img.style.mixBlendMode = 'difference';
             img.loading = 'lazy';
             
             // Add to both sequences

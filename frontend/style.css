@@ -48,6 +48,7 @@ body {
 /* -------------------------------------------------------------------
    GRID OVERLAY
    ------------------------------------------------------------------- */
+/* Commenting out grid overlay
 body::before {
   content: "";
   position: fixed;
@@ -64,6 +65,7 @@ body::before {
     linear-gradient(to bottom, #e0e0e0 1px, transparent 1px);
     opacity: 0.33;
 }
+*/
 
 /* -------------------------------------------------------------------
    BACKGROUND VIDEO AND STREAM (MARQUEE STYLE)
@@ -377,10 +379,13 @@ body::before {
   padding: 15px;
   border-radius: 24px;
   box-shadow: none;
-  width: fit-content;
-  max-width: 600px;
   transition: all 0.3s ease;
   margin: 0;
+}
+
+.pageTitle-content, 
+.text-container {
+  width: auto;
 }
 
 #pageTitle:hover {
@@ -388,17 +393,12 @@ body::before {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-#pageTitle.expanded {
-  position: fixed;
-  inset: 16px;
-  width: auto;
-  height: auto;
-  max-width: none;
-  border-radius: 24px;
-  background: var(--bg-color, #fff);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  padding: 16px;
+#pageTitle:hover h1,
+#pageTitle:hover h3,
+#pageTitle:hover h5,
+#pageTitle:hover h5:last-of-type {
+  color: white;
+  mix-blend-mode: difference;
 }
 
 /* Typography */
@@ -425,7 +425,6 @@ body::before {
   font-weight: 400;
   line-height: 1;
   opacity: 0.8;
-  max-width: 600px;
   color: #666666;
 }
 
@@ -435,80 +434,15 @@ body::before {
   margin-bottom: 0;
 }
 
-/* Expanded state typography */
-#pageTitle.expanded h1,
-#pageTitle.expanded h3,
-#pageTitle.expanded h5 {
-  color: white;
-  mix-blend-mode: exclusion;
+/* Links */
+#pageTitle a {
+  color: #007AFF;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
 }
 
-#pageTitle h6 {
-  font-size: 0.8em;
-  margin: 0;
-  font-weight: 400;
-  line-height: 1.4;
+#pageTitle a:hover {
   opacity: 0.7;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  #pageTitle {
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    width: calc(100% - 16px);
-    padding: 12px;
-    border-radius: 20px;
-  }
-
-  #pageTitle.expanded {
-    width: 100vw;
-  }
-
-  #pageTitle h1 {
-    font-size: 1.8em;
-  }
-
-  #pageTitle h3 {
-    font-size: 1em;
-  }
-
-  #pageTitle h5 {
-    font-size: 0.85em;
-  }
-
-  #pageTitle h6 {
-    font-size: 0.75em;
-  }
-}
-
-@media (max-width: 480px) {
-  #pageTitle {
-    padding: 10px;
-    width: calc(100% - 20px);
-    border-radius: 16px;
-  }
-
-  #pageTitle.expanded {
-    width: 100vw;
-  }
-
-  #pageTitle h1 {
-    font-size: 1.6em;
-  }
-
-  #pageTitle h3 {
-    font-size: 0.9em;
-  }
-
-  #pageTitle h5 {
-    font-size: 0.8em;
-  }
-
-  #pageTitle h6 {
-    font-size: 0.7em;
-  }
 }
 
 /* ----------  SVG & UI  ---------- */
@@ -651,6 +585,7 @@ g text {
   object-fit: cover;
   transition: width 0.3s ease;
   pointer-events: none; /* Allow clicking through to video controls */
+  mix-blend-mode: difference;
 }
 
 /* Video controls should be above image stream */
@@ -668,4 +603,109 @@ g text {
   height: 100vh;
   object-fit: cover;
   z-index: 1;
+}
+
+#pageTitle.expanded {
+  position: fixed;
+  inset: 16px;
+  width: auto;
+  height: auto;
+  max-width: none;
+  border-radius: 24px;
+  background: var(--bg-color, #fff);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 16px;
+}
+
+#pageTitle h1,
+#pageTitle h3,
+#pageTitle h5 {
+  background: transparent; /* Remove hover effect from individual text elements */
+}
+
+/* Background grid */
+/*
+#pageTitle::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+    z-index: 1;
+}
+*/
+
+/* Links */
+#pageTitle a {
+    color: #007AFF;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+#pageTitle a:hover {
+    opacity: 0.7;
+}
+
+/* Remove expanded state styles */
+/*
+#pageTitle.expanded {
+    position: fixed;
+    inset: 16px;
+    width: auto;
+    height: auto;
+    max-width: none;
+    border-radius: 24px;
+    background: var(--bg-color, #fff);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 16px;
+}
+
+#pageTitle.expanded h1,
+#pageTitle.expanded h3,
+#pageTitle.expanded h5 {
+    color: white;
+    mix-blend-mode: difference;
+}
+*/
+
+/* Links in dendrogram */
+.node a {
+    color: #007AFF;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.node a:hover {
+    text-decoration: underline;
+}
+
+.node a.active {
+    text-decoration: underline;
+}
+
+a.link-node text {
+  fill: var(--link-color) !important;
+  text-decoration: none;
+}
+
+a.link-node:hover text,
+a.link-node.active text {
+  text-decoration: underline;
+}
+
+/* Keep generic SVG text black for non-link nodes */
+a text,
+g text {
+  font: 10px/1 'Inter', sans-serif;
+  fill: #000;
+}
+
+.image-stream img,
+.stream-image {
+  mix-blend-mode: difference;
 }

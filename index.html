@@ -17,9 +17,14 @@
     <div class="pageTitle-content">
       <div class="text-container">
         <h1>Cosplay Clusters</h1>
-        <h5>Gathering and speaking about what I have found <br>and think about cosplay communities on the internet. <br>
-        If you have content, images, text or even a video <br>to submit, feel free to write me at <br>office@olivermatzner.com</h5>
-        <h5>A project during the Known Unknowns assignment at <br>Gerrit Rietveld Academie 2nd Year Assignment in the <br>Graphic design class by Tomas Celizna.</h5>
+        <h5>Gathering and speaking about what I have found<br>
+        and think about cosplay communities on the internet.<br>
+        If you have content, images, text or even a video<br>
+        to submit, feel free to write me at<br>
+        office@olivermatzner.com</h5>
+        <h5>A project during the Known Unknowns assignment at<br>
+        Gerrit Rietveld Academie 2nd Year Assignment in the<br>
+        Graphic design class by Tomas Celizna.</h5>
       </div>
     </div>
   </header>
@@ -62,25 +67,6 @@
     const colors = ['#FFADAD', '#FFD6A5', '#FDFFB6', '#CAFFBF', '#9BF6FF', '#A0C4FF', '#BDB2FF', '#FFC6FF'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     document.getElementById('pageTitle').style.setProperty('--bg-color', randomColor);
-
-    // Header expansion functionality
-    const textContainer = document.querySelector('.text-container');
-    const pageTitle = document.getElementById('pageTitle');
-    let isExpanded = false;
-
-    textContainer.addEventListener('mouseenter', () => {
-      if (!isExpanded) {
-        pageTitle.classList.add('expanded');
-        isExpanded = true;
-      }
-    });
-
-    textContainer.addEventListener('mouseleave', () => {
-      if (isExpanded) {
-        pageTitle.classList.remove('expanded');
-        isExpanded = false;
-      }
-    });
   </script>
 </body>
 </html>

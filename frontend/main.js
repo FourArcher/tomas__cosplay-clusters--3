@@ -512,7 +512,7 @@ const pageTitle = document.getElementById('pageTitle');
 const pageTitleWrapper = document.querySelector('.pageTitle-wrapper');
 
 pageTitleWrapper.addEventListener('click', () => {
-  pageTitle.classList.toggle('fullscreen');
+  // Removed fullscreen toggle logic
 });
 
 document.addEventListener('mousemove', (e) => {
